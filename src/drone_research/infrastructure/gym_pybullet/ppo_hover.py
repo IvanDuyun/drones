@@ -1,7 +1,9 @@
 import json
+import pkgutil
 import time
 from datetime import datetime
 from pathlib import Path
+from zipimport import zipimporter
 
 import numpy as np
 from stable_baselines3 import PPO
@@ -10,6 +12,12 @@ from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
 
 from drone_research.domain.config import HoverEvaluationConfig, HoverTrainConfig
+
+
+# gym-pybullet-drones currently imports pkg_resources paths that still expect
+# pkgutil.ImpImporter, which was removed in Python 3.12.
+if not hasattr(pkgutil, "ImpImporter"):
+    pkgutil.ImpImporter = zipimporter  # type: ignore[attr-defined]
 
 
 def _build_run_dir(base_dir: Path) -> Path:
