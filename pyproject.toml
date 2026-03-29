@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "drones-research"
+version = "0.1.0"
+description = "Research project for UAV control with AI methods"
+authors = ["Ivan"]
+readme = "README.md"
+packages = [{ include = "drone_research", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+numpy = "^2.1.0"
+pandas = "^2.2.3"
+matplotlib = "^3.10.1"
+pyyaml = "^6.0.2"
+stable-baselines3 = "^2.5.0"
+tensorboard = "^2.19.0"
+gym-pybullet-drones = { git = "https://github.com/utiasDSL/gym-pybullet-drones.git" }
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+ruff = "^0.11.2"
+mypy = "^1.15.0"
+ipykernel = "^6.29.5"
+jupyter = "^1.1.1"
+
+[tool.poetry.scripts]
+train-hover = "drone_research.interfaces.cli.train_hover:main"
+evaluate-hover = "drone_research.interfaces.cli.evaluate_hover:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"

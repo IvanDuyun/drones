@@ -1,0 +1,9 @@
+experiment_name: hover_baseline
+target_position: [0.0, 0.0, 1.0]
+train:
+  total_timesteps: 100000
+  seed: 42
+  learning_rate: 0.0003
+evaluation:
+  episodes: 10
+  render: false
