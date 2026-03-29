@@ -1,4 +1,5 @@
 import json
+from importlib.machinery import FileFinder
 import pkgutil
 import time
 from datetime import datetime
@@ -18,6 +19,14 @@ from drone_research.domain.config import HoverEvaluationConfig, HoverTrainConfig
 # pkgutil.ImpImporter, which was removed in Python 3.12.
 if not hasattr(pkgutil, "ImpImporter"):
     pkgutil.ImpImporter = zipimporter  # type: ignore[attr-defined]
+
+# Older pkg_resources namespace handling also expects find_module() on FileFinder.
+if not hasattr(FileFinder, "find_module"):
+    def _find_module(self: FileFinder, fullname: str):  # type: ignore[override]
+        spec = self.find_spec(fullname)
+        return spec.loader if spec is not None else None
+
+    FileFinder.find_module = _find_module  # type: ignore[attr-defined]
 
 
 def _build_run_dir(base_dir: Path) -> Path:
